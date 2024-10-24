@@ -1,0 +1,25 @@
+body {
+    background-color: black;
+    text-align: center;
+}
+
+#meme {
+    width: 50%;
+    margin-left: 25%;
+}
+
+#meme_img {
+    width: 100%;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+}
+
+h1 {
+    color: white;
+    text-transform: uppercase;
+}
+
+p {
+    color: white;
+}
