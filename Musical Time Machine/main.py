@@ -1,4 +1,5 @@
 import os
+from logging import raiseExceptions
 from pprint import pprint
 
 from dotenv import load_dotenv
@@ -33,14 +34,22 @@ songs = soup.find_all("h3", attrs={"class": "a-no-trucate"})
 song_titles = [song.getText().strip() for song in songs]
 
 
+songs_to_add = []
+
+for song in song_titles:
+    try:
+        result = sp.search(q=f"track:{song}, year:{year}", type="track", limit=1)
+        if len(result["tracks"]["items"]) == 0:
+            raise ValueError
+        song = result["tracks"]["items"][0]["uri"]
+        songs_to_add.append(song)
+    except ValueError:
+        print(f"{song} does not exist in Spotify. Skipping.")
+
 playlist = sp.user_playlist_create(user=user_id,
                                    name=f"Top 100 song week of {date}",
                                    public=False,
                                    collaborative=False,
                                    description=f"This playlist contains the top 100 songs on the week of {date}")
 
-pprint(playlist)
-
-
-
-
+result = sp.playlist_add_items(playlist_id=playlist["id"], items=songs_to_add)
